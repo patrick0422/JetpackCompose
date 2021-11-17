@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// @Composable 어노테이션을 통해 이 함수가 UI의 일부분임을 알려준다
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
