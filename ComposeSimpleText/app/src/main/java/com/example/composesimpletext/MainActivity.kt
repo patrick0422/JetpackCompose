@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Greeting("Student")
+            GreetingButton()
 
             // Text 함수도 Composable 기반이기 때문에 바로 setContent 안에 넣어도 작동
 //            Text(text = "Hello $name!")
@@ -32,6 +32,6 @@ Preview 화면의 내용은 @Preview 함수 안의 내용을 표시하기 때문
 @Composable
 fun DefaultPreview() {
     ComposeSimpleTextTheme {
-        Greeting("Student")
+        GreetingButton()
     }
 }

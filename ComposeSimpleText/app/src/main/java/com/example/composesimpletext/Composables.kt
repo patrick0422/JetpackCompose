@@ -1,5 +1,6 @@
 package com.example.composesimpletext
 
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
@@ -14,6 +15,13 @@ Composable 함수들 자체도 액티비티에서 분리되어 어디에도 종�
 
 // @Composable 어노테이션을 통해 이 함수가 UI의 일부분임을 알려준다
 @Composable
-fun Greeting(name: String) {
+fun GreetingText(name: String) {
     Text(text = "Hello $name!")
+}
+
+@Composable
+fun GreetingButton() {
+    Button(onClick = {  }) {
+        GreetingText("Button")
+    }
 }
