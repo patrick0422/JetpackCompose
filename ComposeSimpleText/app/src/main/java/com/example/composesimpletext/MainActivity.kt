@@ -33,14 +33,20 @@ fun MainScreen() {
         color = Color.DarkGray,
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
+        Column(
+            Modifier.padding(30.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.Start
         ) {
-            ColoredSurface(color = Color.Blue)
-            ColoredSurface(color = Color.White)
-            ColoredSurface(color = Color.Red)
+            Row(
+                 Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                ColoredSurface(color = Color.Blue)
+                ColoredSurface(color = Color.White)
+                ColoredSurface(color = Color.Red)
+            }
             ColoredSurface(color = Color.Blue)
             ColoredSurface(color = Color.White)
             ColoredSurface(color = Color.Red)
@@ -53,8 +59,8 @@ fun ColoredSurface(color: Color) {
     Surface(
         color = color,
         modifier = Modifier
-            .width(30.dp)
-            .fillMaxHeight()
+            .width(50.dp)
+            .height(50.dp)
     ) {}
 }
 
