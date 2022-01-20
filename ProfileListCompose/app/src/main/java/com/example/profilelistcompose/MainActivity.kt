@@ -20,12 +20,15 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.profilelistcompose.ui.theme.ProfileListComposeTheme
+import com.example.profilelistcompose.ui.theme.lightGreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            ProfileListComposeTheme {
+                MainScreen()
+            }
         }
     }
 }
@@ -33,8 +36,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.LightGray
+        modifier = Modifier.fillMaxSize()
     ) {
         ProfileCard()
     }
@@ -47,7 +49,8 @@ fun ProfileCard() {
             .padding(16.dp)
             .fillMaxWidth()
             .wrapContentHeight(align = Alignment.Top),
-        elevation = 8.dp
+        elevation = 8.dp,
+        backgroundColor = Color.White
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -64,7 +67,7 @@ fun ProfileCard() {
 fun ProfilePicture() {
     Card(
         shape = CircleShape,
-        border = BorderStroke(2.dp, Color.Green),
+        border = BorderStroke(2.dp, lightGreen),
         elevation = 8.dp,
         modifier = Modifier
             .padding(16.dp)
@@ -95,5 +98,7 @@ fun ProfileContent() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    MainScreen()
+    ProfileListComposeTheme {
+        MainScreen()
+    }
 }
