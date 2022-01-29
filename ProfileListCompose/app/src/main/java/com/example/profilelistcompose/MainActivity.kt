@@ -29,19 +29,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ProfileListComposeTheme {
-                MainScreen()
+                MainScreen(userProfileList)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(userProfiles: List<UserProfile>) {
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            ProfileCard()
+            Column {
+                for(userProfile in userProfiles)
+                    ProfileCard(userProfile = userProfile)
+            }
         }
     }
 }
@@ -57,7 +60,7 @@ fun AppBar() {
 }
 
 @Composable
-fun ProfileCard() {
+fun ProfileCard(userProfile: UserProfile) {
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -71,23 +74,23 @@ fun ProfileCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture()
-            ProfileContent()
+            ProfilePicture(userProfile.drawableId, userProfile.status)
+            ProfileContent(userProfile.name, userProfile.status)
         }
     }
 }
 
 @Composable
-fun ProfilePicture() {
+fun ProfilePicture(drawableId: Int, status: Boolean) {
     Card(
         shape = CircleShape,
-        border = BorderStroke(2.dp, lightGreen),
+        border = BorderStroke(2.dp, if (status) Color.Green else Color.Red),
         elevation = 8.dp,
         modifier = Modifier
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.batman),
+            painter = painterResource(id = drawableId),
             contentDescription = "Profile Image",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
@@ -96,15 +99,15 @@ fun ProfilePicture() {
 }
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(name: String, status: Boolean) {
     Column(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Text(text = "John Doe", style = MaterialTheme.typography.h5)
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text(text = "Active now", style = MaterialTheme.typography.body2)
+        Text(text = name, style = MaterialTheme.typography.h5)
+        CompositionLocalProvider(LocalContentAlpha provides if(status) 1f else ContentAlpha.medium) {
+            Text(text = if(status) "Active now" else "Offline", style = MaterialTheme.typography.body2)
         }
     }
 }
@@ -113,6 +116,6 @@ fun ProfileContent() {
 @Composable
 fun DefaultPreview() {
     ProfileListComposeTheme {
-        MainScreen()
+        MainScreen(userProfileList)
     }
 }
