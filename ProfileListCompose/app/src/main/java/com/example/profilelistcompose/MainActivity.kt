@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.example.profilelistcompose.ui.theme.ProfileListComposeTheme
 import com.example.profilelistcompose.ui.theme.lightGreen
 
@@ -93,7 +94,7 @@ fun ProfilePicture(drawableId: Int, status: Boolean) {
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = drawableId),
+            painter = rememberImagePainter(drawableId),
             contentDescription = "Profile Image",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
