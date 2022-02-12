@@ -116,6 +116,18 @@ fun ProfileContent(name: String, status: Boolean) {
     }
 }
 
+@Composable
+fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+    Scaffold(topBar = { AppBar() }) {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ProfileCard(userProfile = userProfile)
+        }
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
