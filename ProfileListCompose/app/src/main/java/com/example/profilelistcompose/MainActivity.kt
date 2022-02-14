@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.profilelistcompose.ui.theme.ProfileListComposeTheme
@@ -78,14 +79,14 @@ fun ProfileCard(userProfile: UserProfile) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture(userProfile.drawableId, userProfile.status)
-            ProfileContent(userProfile.name, userProfile.status)
+            ProfilePicture(userProfile.drawableId, userProfile.status, 72.dp)
+            ProfileContent(userProfile.name, userProfile.status, Alignment.Start)
         }
     }
 }
 
 @Composable
-fun ProfilePicture(drawableId: Int, status: Boolean) {
+fun ProfilePicture(drawableId: Int, status: Boolean, imgSize: Dp) {
     Card(
         shape = CircleShape,
         border = BorderStroke(2.dp, if (status) Color.Green else Color.Red),
@@ -96,18 +97,18 @@ fun ProfilePicture(drawableId: Int, status: Boolean) {
         Image(
             painter = rememberImagePainter(drawableId),
             contentDescription = "Profile Image",
-            modifier = Modifier.size(72.dp),
+            modifier = Modifier.size(imgSize),
             contentScale = ContentScale.Crop
         )
     }
 }
 
 @Composable
-fun ProfileContent(name: String, status: Boolean) {
+fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizontal) {
     Column(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalAlignment = alignment
     ) {
         Text(text = name, style = MaterialTheme.typography.h5)
         CompositionLocalProvider(LocalContentAlpha provides if(status) 1f else ContentAlpha.medium) {
@@ -122,15 +123,29 @@ fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            ProfileCard(userProfile = userProfile)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                ProfilePicture(userProfile.drawableId, userProfile.status, 240.dp)
+                ProfileContent(userProfile.name, userProfile.status, Alignment.CenterHorizontally)
+            }
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun DetailPreview() {
+    ProfileListComposeTheme {
+        UserProfileDetailScreen()
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun ListPreview() {
     ProfileListComposeTheme {
         MainScreen(userProfileList)
     }
