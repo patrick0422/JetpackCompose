@@ -18,29 +18,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.profilelistcompose.ui.theme.ProfileListComposeTheme
-import com.example.profilelistcompose.ui.theme.lightGreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ProfileListComposeTheme {
-                MainScreen(userProfileList)
+                UserListScreen(userProfileList)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(userProfiles: List<UserProfile>) {
+fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "users_list") {
+        composable("users_list") {
+            UserListScreen(userProfileList)
+        }
+        composable("user_detail") {
+            UserProfileDetailScreen()
+        }
+    }
+}
+
+@Composable
+fun UserListScreen(userProfiles: List<UserProfile>) {
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
@@ -49,6 +61,24 @@ fun MainScreen(userProfiles: List<UserProfile>) {
                 items(userProfiles) { userProfile ->
                     ProfileCard(userProfile = userProfile)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+    Scaffold(topBar = { AppBar() }) {
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                ProfilePicture(userProfile.drawableId, userProfile.status, 240.dp)
+                ProfileContent(userProfile.name, userProfile.status, Alignment.CenterHorizontally)
             }
         }
     }
@@ -117,24 +147,6 @@ fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizonta
     }
 }
 
-@Composable
-fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
-    Scaffold(topBar = { AppBar() }) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                ProfilePicture(userProfile.drawableId, userProfile.status, 240.dp)
-                ProfileContent(userProfile.name, userProfile.status, Alignment.CenterHorizontally)
-            }
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DetailPreview() {
@@ -147,6 +159,6 @@ fun DetailPreview() {
 @Composable
 fun ListPreview() {
     ProfileListComposeTheme {
-        MainScreen(userProfileList)
+        UserListScreen(userProfileList)
     }
 }
