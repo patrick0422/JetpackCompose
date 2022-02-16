@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ProfileListComposeTheme {
-                UserListScreen(userProfileList)
+                UsersApplication()
             }
         }
     }
@@ -43,7 +45,7 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "users_list") {
         composable("users_list") {
-            UserListScreen(userProfileList)
+            UserListScreen(userProfileList, navController)
         }
         composable("user_detail") {
             UserProfileDetailScreen()
@@ -52,14 +54,16 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
 }
 
 @Composable
-fun UserListScreen(userProfiles: List<UserProfile>) {
+fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostController?) {
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn {
                 items(userProfiles) { userProfile ->
-                    ProfileCard(userProfile = userProfile)
+                    ProfileCard(userProfile = userProfile) {
+                        navController?.navigate("user_detail")
+                    }
                 }
             }
         }
@@ -95,12 +99,15 @@ fun AppBar() {
 }
 
 @Composable
-fun ProfileCard(userProfile: UserProfile) {
+fun ProfileCard(userProfile: UserProfile, clickAction: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),
+            .wrapContentHeight(align = Alignment.Top)
+            .clickable {
+                clickAction()
+            },
         elevation = 8.dp,
         backgroundColor = Color.White
     ) {
@@ -141,8 +148,11 @@ fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizonta
         horizontalAlignment = alignment
     ) {
         Text(text = name, style = MaterialTheme.typography.h5)
-        CompositionLocalProvider(LocalContentAlpha provides if(status) 1f else ContentAlpha.medium) {
-            Text(text = if(status) "Active now" else "Offline", style = MaterialTheme.typography.body2)
+        CompositionLocalProvider(LocalContentAlpha provides if (status) 1f else ContentAlpha.medium) {
+            Text(
+                text = if (status) "Active now" else "Offline",
+                style = MaterialTheme.typography.body2
+            )
         }
     }
 }
@@ -159,6 +169,6 @@ fun DetailPreview() {
 @Composable
 fun ListPreview() {
     ProfileListComposeTheme {
-        UserListScreen(userProfileList)
+        UserListScreen(userProfileList, null)
     }
 }
