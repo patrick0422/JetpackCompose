@@ -23,9 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import com.example.profilelistcompose.ui.theme.ProfileListComposeTheme
 
@@ -47,8 +49,11 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
         composable("users_list") {
             UserListScreen(userProfileList, navController)
         }
-        composable("user_detail") {
-            UserProfileDetailScreen()
+        composable(route = "user_detail/{userId}", arguments = listOf(navArgument("userId") {
+            type = NavType.IntType
+        })
+        ) { navBackStackEntry ->
+            UserProfileDetailScreen(navBackStackEntry.arguments!!.getInt("userId"))
         }
     }
 }
@@ -62,7 +67,7 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostContro
             LazyColumn {
                 items(userProfiles) { userProfile ->
                     ProfileCard(userProfile = userProfile) {
-                        navController?.navigate("user_detail")
+                        navController?.navigate("user_detail/${userProfile.id}")
                     }
                 }
             }
@@ -71,7 +76,9 @@ fun UserListScreen(userProfiles: List<UserProfile>, navController: NavHostContro
 }
 
 @Composable
-fun UserProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+fun UserProfileDetailScreen(userId: Int) {
+    val userProfile: UserProfile = userProfileList.first { userProfile -> userId == userProfile.id }
+
     Scaffold(topBar = { AppBar() }) {
         Surface(
             modifier = Modifier.fillMaxSize()
@@ -161,7 +168,7 @@ fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizonta
 @Composable
 fun DetailPreview() {
     ProfileListComposeTheme {
-        UserProfileDetailScreen()
+        UserProfileDetailScreen(0)
     }
 }
 
