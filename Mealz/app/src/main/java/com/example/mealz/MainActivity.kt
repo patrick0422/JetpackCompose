@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mealz.ui.theme.MealzTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +28,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun MealsCategoriesScreen() {
+    val mealsCategoriesViewModel: MealsCategoriesViewModel = viewModel()
 }
 
 @Composable
