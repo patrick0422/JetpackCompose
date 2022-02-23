@@ -63,4 +63,16 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+
+    // Retrofit
+    def retrofit_version = "2.9.0"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    // Logging Interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.7'
 }
