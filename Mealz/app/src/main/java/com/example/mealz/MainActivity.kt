@@ -18,13 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MealzTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+                MealsCategoriesScreen()
             }
         }
     }
@@ -32,18 +26,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MealsCategoriesScreen() {
-    val mealsCategoriesViewModel: MealsCategoriesViewModel = viewModel()
-}
+    val viewModel: MealsCategoriesViewModel = viewModel()
+    val meals = viewModel.getMealCategories()
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+    Text(text = "Hello Compose!")
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     MealzTheme {
-        Greeting("Android")
+        MealsCategoriesScreen()
     }
 }
