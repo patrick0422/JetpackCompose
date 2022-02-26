@@ -1,4 +1,4 @@
-package com.example.mealz
+package com.example.mealz.util
 
 sealed class NetworkResult<T>(
     val data: T? = null,

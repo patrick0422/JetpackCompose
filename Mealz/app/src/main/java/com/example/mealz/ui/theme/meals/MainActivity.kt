@@ -1,22 +1,19 @@
-package com.example.mealz
+package com.example.mealz.ui.theme.meals
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mealz.ui.theme.viewmodel.MealsCategoriesViewModel
+import com.example.mealz.util.NetworkResult
 import com.example.mealz.ui.theme.MealzTheme
+import com.example.mealz.util.Constants.Companion.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,13 +33,22 @@ class MainActivity : ComponentActivity() {
 fun MealsCategoriesScreen() {
     val viewModel: MealsCategoriesViewModel = hiltViewModel()
 
-    viewModel.categoriesResponse.observeAsState {
-        Log.d("TAG", "MealsCategoriesScreen: ${viewModel.categoriesResponse.value!!.data!!.mealCategories}")
+    when(val categories = viewModel.categoriesState.value) {
+        is NetworkResult.Success -> {
+            LazyColumn {
+                items(categories.data!!.mealCategories) { category ->
+                    Text(text = category.CategoryName)
+                }
+            }
+        }
+        is NetworkResult.Error -> {
+            Log.d(TAG, "MealsCategoriesScreen: ${categories.message}")
+            Text(text = "ERROR!! Message: ${categories.message}")
+        }
+        is NetworkResult.Loading -> {
+            Text(text = "Loading...")
+        }
     }
-
-    viewModel.getMealCategories()
-
-    Text(text = "Hello Compose!")
 }
 
 @Preview(showBackground = true)

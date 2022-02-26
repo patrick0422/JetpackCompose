@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface MealzApi {
-    @GET("/categories.php")
+    @GET("api/json/v1/1/categories.php")
     suspend fun getMealCategories(): Response<CategoriesResponse>
 
 }
